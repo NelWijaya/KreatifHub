@@ -48,7 +48,7 @@
         </div>
     </nav>
 
-    <div class="container pb-5">
+    <div class="container">
         <!-- ALERT -->
         <?php if ($success = $this->session->flashdata('success')) : ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -90,6 +90,9 @@
             Tambah Data Mahasiswa
         </button>
 
+        <a href="<?php echo base_url('/') ?>" class="btn btn-info mr-2 mb-3">
+            All
+        </a>
         <!-- Modal -->
         <div class="modal fade" id="formRegist" tabindex="-1" aria-labelledby="Modal" aria-hidden="true">
             <div class="modal-dialog">
@@ -190,10 +193,11 @@
             </thead>
             <tbody>
                 <?php
+                $no = 1;
                 foreach ($talent as $row) {
                 ?>
                 <tr>
-                    <th><?php echo ++$start ?></th>
+                    <th><?php echo $no ?></th>
                     <th><?php echo $row->name ?></th>
                     <td><img src="<?php echo base_url(); ?>assets/photo/<?php echo $row->foto_profile ?>"
                             alt="<?php echo $row->foto_profile ?>" width="100" height="100"></td>
@@ -276,7 +280,9 @@
             </tbody>
         </table>
 
-        <?php echo $this->pagination->create_links(); ?>
+    </div>
+
+    <div class="row container">
 
     </div>
 

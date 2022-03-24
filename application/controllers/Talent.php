@@ -9,22 +9,31 @@ class Talent extends CI_Controller
         $this->load->model('M_Kategori');
         $this->load->model('M_Talent');
         $this->load->helper('security');
+        $this->load->library('pagination');
     }
 
     public function index()
     {
-        $dataKategori = $this->M_Kategori->getDataKategori();
-        $data['kategori'] = $dataKategori;
+        $data['kategori'] = $this->M_Kategori->getDataKategori();
 
-        $dataTalent = $this->M_Talent->getDataTalent();
-        $data['talent'] = $dataTalent;
+        // Config
+        $config['base_url'] = base_url() . 'talent/index';
+        $config['total_rows'] = $this->M_Talent->getCount();
+        $config['per_pages'] = 10;
+
+        // Initialize
+        $this->pagination->initialize($config);
+
+        $data['start'] = $this->uri->segment(3);
+        $data['talent'] = $this->M_Talent->getDataTalent($config['per_pages'], $data['start']);
 
         // echo "<pre>";
-        // print_r($dataTalent);
+        // print_r($data['talent']);
         // echo "</pre>";
         // die();
         $this->load->view('talent/index',  $data);
     }
+
 
     public function kategori()
     {
@@ -33,6 +42,12 @@ class Talent extends CI_Controller
         $this->load->view('talent/kategori',  $data);
     }
 
+    public function search()
+    {
+        $key = $this->input->post('keyword');
+        $data['talent'] = $this->M_Talent->getKeyword($key);
+        $this->load->view('talent/search', $data);
+    }
 
 
     public function addTalent()

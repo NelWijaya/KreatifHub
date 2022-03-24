@@ -3,28 +3,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_Talent extends CI_Model
 {
-    function getDataTalent()
+    function getDataTalent($limit, $start)
     {
         $this->db->get('talent');
         $this->db->join('fotoprofile', 'talent.id_foto_profile = fotoprofile.id');
         $this->db->join('kategori', 'talent.id_kategori = kategori.id');
-        $query = $this->db->get('talent');
-        return $query->result();
+        $query = $this->db->get('talent', $limit, $start)->result();
+        return $query;
     }
 
-    function getPhotoTalent($id)
+    function getCount()
     {
-        $this->db->where('id', $id);
-        $query = $this->db->get('fotoprofile');
-
-        return $query->row();
+        return $this->db->get('talent')->num_rows();
     }
 
-    function getKategoriTalent($id)
+    function getKeyword($key)
     {
-        $this->db->where('id', $id);
-        $query = $this->db->get('kategori');
-        return $query->row();
+        $this->db->select('*');
+        $this->db->from('talent');
+        $this->db->like('nama_kategori', $key);
+        $this->db->or_like('name', $key);
+        $this->db->join('fotoprofile', 'talent.id_foto_profile = fotoprofile.id');
+        $this->db->join('kategori', 'talent.id_kategori = kategori.id');
+
+
+        return $this->db->get()->result();
     }
 
     function insertDataTalent($data)
